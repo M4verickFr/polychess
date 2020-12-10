@@ -11,4 +11,4 @@ board = chess.Board()
 #access the Polyglot book
 with chess.polyglot.open_reader("bookfish.bin") as reader:
     for entry in reader.find_all(board):
-        print(entry.move(), entry.weight, entry.learn)
+        print(entry.move, entry.weight, entry.learn)
