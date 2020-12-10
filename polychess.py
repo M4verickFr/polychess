@@ -1,6 +1,6 @@
 #python-chess import
 #https://github.com/niklasf/python-chess
-from python_chess import chess
+import chess
 
 #set the board to its initial position
 #corresponding to: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
