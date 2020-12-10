@@ -1,6 +1,6 @@
 #python-chess import 
 #https://github.com/niklasf/python-chess
-import chess
+from python_chess import chess
 
 #used to access Polyglot book
 import chess.polyglot
