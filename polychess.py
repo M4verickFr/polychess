@@ -2,7 +2,9 @@
 #https://github.com/niklasf/python-chess
 import chess
 #import polyglot as pg
+import chess.polyglot 
 
+import minMax 
 
 #SVG render for the board is possible in Jupyter Notebook
 #board
@@ -20,15 +22,17 @@ def chooseGameType():
     #JvsJ
     #JvsIA
     #...
-    gameType = 1
+    gameType = 2
     return gameType
 
-def startRound(board, gameType):
+def startRound(board, playerType):
     #Appeler le type de partie en fonction du type de partie
     move = None
 
-    if(gameType == 1):
+    if(playerType == 1):
         move = getPlayerMove(board)
+    elif(playerType == 2):
+        move = getIAMove(board)
 
     current_board = makeMove(board, move)
     return current_board
@@ -49,12 +53,25 @@ def getPlayerMove(board):
         print("Erreur de saisie : aucun mouvement possible ne correspond a votre saisie")      
         return getPlayerMove(board)
 
-    
-    
-
     return deplacement
 
-    
+
+def getIAMove(board): #obtient le meilleur mouvement
+    maxWeight = 0
+    deplacement = None 
+    with chess.polyglot.open_reader("bookfish.bin") as reader:
+        for entry in reader.find_all(board):
+            if maxWeight < entry.weight :
+
+                deplacement = entry.move
+                maxWeight = entry.weight   
+    if not deplacement:
+        deplacement = minMax.minMaxAlphaBeta(board,4,-3000,3000) #????????????????#
+
+    print(deplacement)
+    return(str(deplacement))
+
+
 
 def makeMove(board,move):
     deplacement = chess.Move.from_uci(move)
@@ -71,15 +88,22 @@ def chessGame():
     displayBoard(board)
 
     while not board.is_game_over():
-        board = startRound(board, gameType)
-
-
+        if gameType == 1:
+            board = startRound(board, 1)
+            if not board.is_game_over():
+                board = startRound(board, 1)
+        elif gameType == 2:
+            board = startRound(board, 1)
+            if not board.is_game_over():
+                board = startRound(board, 2)
 
     print("The game is over")
     print(board.result())
 
 chessGame()
 """
+moves = board.legal_moves
+
 #iterate over all the moves
 for move in moves: 
     
