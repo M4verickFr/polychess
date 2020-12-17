@@ -1,14 +1,42 @@
-#python-chess import
-#https://github.com/niklasf/python-chess
 import chess
-#import polyglot as pg
 import chess.polyglot 
 import random
 
-#SVG render for the board is possible in Jupyter Notebook
-#board
+def main():
+    """
+        -gameType(int): the type of the current player
+        -0:Played by the console
+        -1:Played with protocol UCI
+    """
+    gameType = 0
+    """
+        -playerType(int): the type of the current player
+        -0:Played by a human
+        -1:Played by Polyglot
+    """
+    playerTypeUCI = 0
+    
+    defaultGameType = [choosePlayerType, playerTypeUCI]
 
-#get all the legal moves for the current position
+    if callable(defaultGameType[gameType]):
+        playerType = defaultGameType[gameType]()
+    else:
+        playerType = defaultGameType[gameType]
+
+    board = initBoard()
+    displayBoard(board)
+
+    players = [0, playerType]
+    random.shuffle(players)
+    
+    #If the game is not over
+    while not board.is_game_over():
+        board = makeMove(board, players[0])
+        if board.is_game_over():
+            board = makeMove(board, players[1])
+    
+    print("The game is over")
+    print(board.result())
 
 def initBoard():
     return chess.Board()
@@ -16,44 +44,35 @@ def initBoard():
 def displayBoard(board):
     print(board)
 
-def chooseGameType():
-    #Display menu
-    #Select gameType
-    liste = [1,2]
-    erreur = False
+def choosePlayerType():
+    playersType = [0,1]
     print("------------------------------")
-    print("Choisir le mode de jeu :")
-    print("1- Joueur contre Joueur")
-    print("2- Joueur contre IA")
-    gameType = input("Saisissez le mode : ")
+    print("Select game type :")
+    print("0- Played versus Human")
+    print("1- Played versus Polyglot")
+    playerType = int(input("Enter selected mode : "))
 
-    try:
-        if(not int(gameType) in liste):
-            erreur = True
-    except: 
-        erreur = True
-    if(erreur):
+    if(not playerType in playersType):
         print("------------------------------")
         print("Erreur de saisie")
-        chooseGameType()
+        choosePlayerType()
 
+    return playerType
 
-    return int(gameType)
-
-
-def startRound(board, playerType):
+def getMove(board, playerType):
     #Get the move related with the playerType
     move = None
-    print(board.turn)
-    if(playerType == 1):
-        move = getPlayerMove(board)
-    elif(playerType == 2):
-        move = getIAMove(board)
+    playerTypeMovesFunction = [
+        getPlayerMove,
+        getIAMove
+    ]
 
-    #Make a move
-    current_board = makeMove(board, move)
-    return current_board
+    movesFunction = playerTypeMovesFunction[playerType]
+    move = movesFunction(board)
 
+    return move
+
+#get all the legal moves for the current position
 def getPlayerMove(board):
     #Display player movement selection
     validDeplacement = False
@@ -94,45 +113,16 @@ def getIAMove(board):
         #EN COURS
         #val, deplacement = minmax(board,1)
 
-
-
     return(str(deplacement))
 
-
-
-def makeMove(board,move):
-    #Make a move on the board
+def makeMove(board, playerType):
+    move = getMove(board, playerType)
     deplacement = chess.Move.from_uci(str(move))
     board.push(deplacement)
-
-    displayBoard(board)
-
-    return board
-
-def chessGame():
-    #Create a game
-    #Initialization 
-    board = initBoard()
-    #Choose the game type
-    gameType = chooseGameType()
     
     displayBoard(board)
 
-    #If the game is not over
-    while not board.is_game_over():
-        #Make a round related with the game type
-        if gameType == 1:
-            board = startRound(board, 1)
-            if not board.is_game_over():
-                board = startRound(board, 1)
-        elif gameType == 2:
-            board = startRound(board, 1)
-            if not board.is_game_over():
-                board = startRound(board, 2)
-
-    print("The game is over")
-    print(board.result())
-
+    return board
 
 def minmax(board, depth):
     moves = list(board.legal_moves)
@@ -179,52 +169,6 @@ def minmax(board, depth):
 
     return value, bestMove
 
-
-    """
-    function minimax(node, depth, maximizingPlayer) is
-    if depth = 0 or node is a terminal node then
-        return the heuristic value of node
-    if maximizingPlayer then
-        value := −∞
-        for each child of node do
-            value := max(value, minimax(child, depth − 1, FALSE))
-        return value
-    else (* minimizing player *)
-        value := +∞
-        for each child of node do
-            value := min(value, minimax(child, depth − 1, TRUE))
-        return value
-    """
-
-chessGame()
-"""
-moves = board.legal_moves
-
-#iterate over all the moves
-for move in moves: 
-    
-    #display the move
-    print(move)
-
-    #save the current position
-    current_board = board
-    
-    #do the move
-    board.push(move)
-    
-    #display the board
-    print(board)
-    
-    #number of black moves
-    print("Black moves:" + str(board.legal_moves.count()))
-    
-    #undo the move
-    board.pop()
-    
-
-
-    #do we have a winner?
-    if (board.is_game_over()):
-        print("The game is over")
-        print(board.result())
-"""  
+# Calls the main function
+if __name__ == "__main__":
+    main()    
