@@ -3,8 +3,12 @@
 import chess
 #import polyglot as pg
 import chess.polyglot
-import polyglot as pg
 import random
+
+import polyglot as pg
+import evaluation
+
+
 
 #SVG render for the board is possible in Jupyter Notebook
 #board
@@ -91,7 +95,7 @@ def getIAMove(board):
         #Déplacement de l'IA avec l'algorithme de minmax
         #EN COURS
 
-        #val, deplacement = minmax(board,1)
+        val, deplacement = minmax(board,1)
 
 
 
@@ -138,7 +142,7 @@ def minmax(board, depth):
     bestMove = None
 
     if depth == 0 or len(moves) == 0:
-        return 0, None
+        return evaluation.getValueBoard(board),None
 
     print(depth)
 
