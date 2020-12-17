@@ -1,7 +1,7 @@
 import chess
 import chess.polyglot
 
-def bestMove(board, debug = False):
+def bestMove(board):
     weight = 0
     bestMove = None
     with chess.polyglot.open_reader("bookfish.bin") as reader:
@@ -13,4 +13,4 @@ def bestMove(board, debug = False):
 
 # Testing our code
 board = chess.Board()
-print(bestMove(board, debug=True))
+print(bestMove(board))
