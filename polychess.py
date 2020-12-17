@@ -39,7 +39,7 @@ def main():
     #If the game is not over
     while not board.is_game_over():
         board = makeMove(board, players[0])
-        if board.is_game_over():
+        if not board.is_game_over():
             board = makeMove(board, players[1])
     
     print("The game is over")
@@ -116,12 +116,13 @@ def getIAMove(board):
         #Déplacement de l'IA avec l'algorithme de minmax
         #EN COURS
 
-        val, deplacement = minmax(board,1)
+        val, deplacement = minmax(board,3)
 
     return(str(deplacement))
 
 def makeMove(board, playerType):
     move = getMove(board, playerType)
+
     deplacement = chess.Move.from_uci(str(move))
     board.push(deplacement)
     
@@ -134,15 +135,31 @@ def minmax(board, depth):
     bestMove = None
 
     if depth == 0 or len(moves) == 0:
-        return evaluation.getValueBoard(board),None
+        return evaluation.getValueBoard(board),bestMove
 
-    print(depth)
+    
 
-    if(not board.turn):
-        value = -9999
-        #print("ia")
+    if(board.turn):
+        value = -1e-8
+        for move in moves:
+            deplacement = chess.Move.from_uci(str(move))
+            #do the move
+            board.push(deplacement)
+            
+            val, current_move = minmax(board, depth-1)
+
+            #undo the move
+            board.pop()
+            
+            if(val > value):
+                value = val
+                bestMove = move
+
+    else:
+        value = 1e-8
         for move in moves:
 
+            #do the move
             deplacement = chess.Move.from_uci(str(move))
             #do the move
             board.push(deplacement)
@@ -151,26 +168,9 @@ def minmax(board, depth):
 
             #undo the move
             board.pop()
-            
-            if(val > value):
-                value = val
-                bestMove = current_move
-
-    else:
-        #print("j")
-        value = 9999
-        for move in moves:
-    
-            #do the move
-            board.push(chess.Move.from_uci(str(move)))
-            
-            val,current_move = minmax(board, depth-1)
-
-            #undo the move
-            board.pop()
             if(val < value):
                 value = val
-                bestMove = current_move
+                bestMove = move
 
     return value, bestMove
 

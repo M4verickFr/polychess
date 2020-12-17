@@ -1,6 +1,6 @@
 import chess 
 
-PAWN = [
+pawn = [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [5, 10, 10, -20, -20, 10, 10, 5],
     [5, -5, -10, 0, 0, -10, -5, 5],
@@ -11,7 +11,7 @@ PAWN = [
     [0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
-KNIGHT = [
+knight = [
     [-50, -40, -30, -30, -30, -30, -40, -50],
     [-40, -20, 0, 0, 0, 0, -20, -40],
     [-30, 0, 10, 15, 15, 10, 0, -30],
@@ -22,7 +22,7 @@ KNIGHT = [
     [-50, -40, -30, -30, -30, -30, -40, -50]
 ]
 
-BISHOP = [
+bishop = [
     [-20, -10, -10, -10, -10, -10, -10, -20],
     [-10, 0, 0, 0, 0, 0, 0, -10],
     [-10, 0, 5, 10, 10, 5, 0, -10],
@@ -33,7 +33,7 @@ BISHOP = [
     [-20, -10, -10, -10, -10, -10, -10, -20]
 ]
 
-ROOK = [
+rook = [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [5, 10, 10, 10, 10, 10, 10, 5],
     [-5, 0, 0, 0, 0, 0, 0, -5],
@@ -44,7 +44,7 @@ ROOK = [
     [0, 0, 0, 5, 5, 0, 0, 0]
 ]
 
-QUEEN = [
+queen = [
     [-20, -10, -10, -5, -5, -10, -10, -20,],
     [-10, 0, 0, 0, 0, 0, 0, -10],
     [10, 0, 5, 5, 5, 5, 0, -10],
@@ -55,7 +55,7 @@ QUEEN = [
     [-20, -10, -10, -5, -5, -10, -10, -20]
 ]
 
-KING = [
+king = [
     [-30, -40, -40, -50, -50, -40, -40, -30],
     [-30, -40, -40, -50, -50, -40, -40, -30],
     [-30, -40, -40, -50, -50, -40, -40, -30],
@@ -66,8 +66,46 @@ KING = [
     [20, 30, 10, 0, 0, 10, 30, 20]
 ]
 
+def invertBlackValue(piece):
+    ""
+
+def convert_square(square,is_white):
+    if(is_white):
+        row = 7 - (square // 8)
+    else:
+        row = square // 8
+
+    column = square % 8
+    return [row, column]
+
+def piece_value(piece, square):
+    symbol = piece.symbol()
+    is_white = not symbol.islower()
+    symbol = symbol.islower()
+
+    pos = convert_square(square, is_white)
+
+    score = 1 if is_white else -1
+    if symbol == 'p':
+        score *= (1000 + pawn[pos[0]][pos[1]])
+    elif symbol == 'n':
+        score *= (3000 + knight[pos[0]][pos[1]])
+    elif symbol == 'b':
+        score *= (3000 + bishop[pos[0]][pos[1]])
+    elif symbol == 'r':
+        score *= (5000 + rook[pos[0]][pos[1]])
+    elif symbol == 'q':
+        score *= (9000 + queen[pos[0]][pos[1]])
+    elif symbol == 'k':
+        score *= (1000000 + king[pos[0]][pos[1]])
+        
+    return score
+
 def getValueBoard(board):
-    sum(piece_value(board.piece_at(square), square)
-        if board.piece_at(square) is not None 
-        else 0
-        for square in chess.SQUARES)
+    val = 0
+
+    for square in chess.SQUARES:
+        if(board.piece_at(square) != None):
+            val += piece_value(board.piece_at(square),square)
+
+    return val
