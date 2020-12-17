@@ -1,5 +1,6 @@
 import chess
-import chess.polyglot 
+import chess.polyglot
+import polyglot as pg
 import random
 
 def main():
@@ -99,18 +100,16 @@ def getIAMove(board):
     deplacement = None
 
     #Get movement in the polyglot
-    with chess.polyglot.open_reader("bookfish.bin") as reader:
-        for entry in reader.find_all(board):
-            if maxWeight < entry.weight :
-                deplacement = entry.move
-                maxWeight = entry.weight
+    deplacement = pg.bestMove(board)
 
     #If no deplacement
     if not deplacement:
         #Déplacement de l'IA de facon aléatoire
         deplacement = random.choice(list(board.legal_moves))
+
         #Déplacement de l'IA avec l'algorithme de minmax
         #EN COURS
+
         #val, deplacement = minmax(board,1)
 
     return(str(deplacement))
