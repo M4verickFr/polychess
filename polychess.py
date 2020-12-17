@@ -114,9 +114,10 @@ def getIAMove(board):
         deplacement = random.choice(list(board.legal_moves))
 
         #Déplacement de l'IA avec l'algorithme de minmax
-        #EN COURS
-
-        val, deplacement = minmax(board,3)
+        
+        #val, deplacement = minmax(board,3)
+        val, deplacement = minmaxAlphaBeta(board,3,1e-8,-1e-8)
+        
 
     return(str(deplacement))
 
@@ -136,8 +137,6 @@ def minmax(board, depth):
 
     if depth == 0 or len(moves) == 0:
         return evaluation.getValueBoard(board),bestMove
-
-    
 
     if(board.turn):
         value = -1e-8
@@ -171,6 +170,54 @@ def minmax(board, depth):
             if(val < value):
                 value = val
                 bestMove = move
+
+    return value, bestMove
+
+def minmaxAlphaBeta(board, depth, alpha, beta):
+    moves = list(board.legal_moves)
+    bestMove = None
+
+    if depth == 0 or len(moves) == 0:
+        return evaluation.getValueBoard(board),bestMove
+
+    if(board.turn):
+        value = -1e-8
+        for move in moves:
+            deplacement = chess.Move.from_uci(str(move))
+            #do the move
+            board.push(deplacement)
+            
+            val, current_move = minmax(board, depth-1)
+
+            #undo the move
+            board.pop()
+            
+            if(val > value):
+                value = val
+                bestMove = move
+            alpha = max(alpha, val)
+            if(beta < alpha):
+                return value, bestMove
+
+    else:
+        value = 1e-8
+        for move in moves:
+
+            #do the move
+            deplacement = chess.Move.from_uci(str(move))
+            #do the move
+            board.push(deplacement)
+            
+            val,current_move = minmax(board, depth-1)
+
+            #undo the move
+            board.pop()
+            if(val < value):
+                value = val
+                bestMove = move
+            alpha = min(beta, val)
+            if(beta < alpha):
+                return value, bestMove
 
     return value, bestMove
 
