@@ -36,7 +36,7 @@ def main():
     displayBoard(board)
 
     players = [0, playerType]
-    random.shuffle(players)
+    #random.shuffle(players)
     
     #If the game is not over
     while not board.is_game_over():
@@ -204,7 +204,8 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
                 bestMove = move
 
             alpha = max(alpha, val)
-            if(beta < alpha):
+
+            if(beta < alpha and bestMove):
                 return value, bestMove
 
     else:
@@ -225,7 +226,7 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
                 bestMove = move
 
             beta = min(beta, val)
-            if(beta < alpha):
+            if(beta < alpha and bestMove):
                 return value, bestMove
 
     return value, bestMove
