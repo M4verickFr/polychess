@@ -14,22 +14,42 @@ def minmax(board, depth):
     if depth == 0 or len(moves) == 0:
         return [None], evaluation.getValueBoard(board)
 
-    for move in moves:
-        #do the move
-        deplacement = chess.Move.from_uci(str(move))
-        #do the move
-        board.push(deplacement)
-        #get value of the move
-        current_move, val = minmax(board, depth-1)
-        #undo the move
-        board.pop()
+    if(board.turn):
+        value = -1e-8
+        for move in moves:
+            deplacement = chess.Move.from_uci(str(move))
+            #do the move
+            board.push(deplacement)
+            
+            val, current_move = minmax(board, depth-1)
 
-        # if the move is more good, replace bestMove
-        if(val < value):
-            value = val
-            bestMove = move
+            #undo the move
+            board.pop()
+            
+            if(val > value):
+                value = val
+                bestMove = move
 
-        bestMoves.append(bestMove)
+            bestMoves.append(bestMove)
+
+    else:
+        value = 1e-8
+        for move in moves:
+
+            #do the move
+            deplacement = chess.Move.from_uci(str(move))
+            #do the move
+            board.push(deplacement)
+            
+            current_move, val = minmax(board, depth-1)
+
+            #undo the move
+            board.pop()
+            if(val < value):
+                value = val
+                bestMove = move
+
+            bestMoves.append(bestMove)
 
     return bestMoves, value
 
