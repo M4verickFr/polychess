@@ -6,7 +6,7 @@ import chess
 import evaluation
 
 def minmax(board, depth):
-    value = 1e-8
+
     moves = list(board.legal_moves)
     bestMove = None
     bestMoves = []
@@ -21,7 +21,7 @@ def minmax(board, depth):
             #do the move
             board.push(deplacement)
             
-            val, current_move = minmax(board, depth-1)
+            current_move,val = minmax(board, depth-1)
 
             #undo the move
             board.pop()
@@ -29,8 +29,7 @@ def minmax(board, depth):
             if(val > value):
                 value = val
                 bestMove = move
-
-            bestMoves.append(bestMove)
+                bestMoves.append(bestMove)
 
     else:
         value = 1e-8
@@ -41,15 +40,14 @@ def minmax(board, depth):
             #do the move
             board.push(deplacement)
             
-            current_move, val = minmax(board, depth-1)
+            current_move,val = minmax(board, depth-1)
 
             #undo the move
             board.pop()
             if(val < value):
                 value = val
                 bestMove = move
-
-            bestMoves.append(bestMove)
+                bestMoves.append(bestMove)
 
     return bestMoves, value
 
