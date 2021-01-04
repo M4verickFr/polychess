@@ -5,10 +5,12 @@ import random
 import polyglot as pg
 import evaluation
 
+import chess.svg 
 
 
 #SVG render for the board is possible in Jupyter Notebook
 #board
+
 def main():
     """
         -gameType(int): the type of the current player
@@ -44,6 +46,8 @@ def main():
     
     print("The game is over")
     print(board.result())
+    renderSVG(board)
+    
 
 def initBoard():
     return chess.Board()
@@ -80,6 +84,7 @@ def getMove(board, playerType):
     return move
 
 #get all the legal moves for the current position
+
 def getPlayerMove(board):
     #Display player movement selection
     validDeplacement = False
@@ -126,10 +131,11 @@ def makeMove(board, playerType):
 
     deplacement = chess.Move.from_uci(str(move))
     board.push(deplacement)
-    
+
     displayBoard(board)
 
     return board
+
 
 def minmax(board, depth):
     moves = list(board.legal_moves)
@@ -221,6 +227,14 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
 
     return value, bestMove
 
+def renderSVG(board):
+    svg=open("chessrender.svg", "w") 
+    svg.write(chess.svg.board(board))
+    
+
+
 # Calls the main function
+
 if __name__ == "__main__":
     main()
+
