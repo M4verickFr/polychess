@@ -158,7 +158,7 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
             #undo the move
             board.pop()
             
-            if(val > value):
+            if(val > value or not bestMove):
                 value = val
                 bestMove = move
 
@@ -181,7 +181,7 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
 
             #undo the move
             board.pop()
-            if(val < value):
+            if(val < value or not bestMove):
                 value = val
                 bestMove = move
 
