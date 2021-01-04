@@ -112,7 +112,7 @@ def getIAMove(board):
 
     #Get movement in the polyglot
     deplacement = pg.bestMove(board)
-
+    print(deplacement)
     #If no deplacement
     if not deplacement:
         #Déplacement de l'IA de facon aléatoire
@@ -181,6 +181,7 @@ def minmax(board, depth):
 
 def minmaxAlphaBeta(board, depth, alpha, beta):
     moves = list(board.legal_moves)
+
     bestMove = None
 
     if depth == 0 or len(moves) == 0:
@@ -193,7 +194,7 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
             #do the move
             board.push(deplacement)
             
-            val, current_move = minmax(board, depth-1)
+            val, current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
 
             #undo the move
             board.pop()
@@ -201,6 +202,7 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
             if(val > value):
                 value = val
                 bestMove = move
+
             alpha = max(alpha, val)
             if(beta < alpha):
                 return value, bestMove
@@ -214,14 +216,15 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
             #do the move
             board.push(deplacement)
             
-            val,current_move = minmax(board, depth-1)
+            val,current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
 
             #undo the move
             board.pop()
             if(val < value):
                 value = val
                 bestMove = move
-            alpha = min(beta, val)
+
+            beta = min(beta, val)
             if(beta < alpha):
                 return value, bestMove
 
