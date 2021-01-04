@@ -13,4 +13,3 @@ def bestMove(board):
 
 # Testing our code
 board = chess.Board()
-print(bestMove(board))

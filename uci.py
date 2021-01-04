@@ -3,56 +3,13 @@
 
 import time
 import chess
+
 import evaluation
+import tools
 
-def minmax(board, depth):
-
-    moves = list(board.legal_moves)
-    bestMove = None
-    bestMoves = []
-
-    if depth == 0 or len(moves) == 0:
-        return [None], evaluation.getValueBoard(board)
-
-    if(board.turn):
-        value = -1e-8
-        for move in moves:
-            deplacement = chess.Move.from_uci(str(move))
-            #do the move
-            board.push(deplacement)
-            
-            current_move,val = minmax(board, depth-1)
-
-            #undo the move
-            board.pop()
-            
-            if(val > value):
-                value = val
-                bestMove = move
-                bestMoves.append(bestMove)
-
-    else:
-        value = 1e-8
-        for move in moves:
-
-            #do the move
-            deplacement = chess.Move.from_uci(str(move))
-            #do the move
-            board.push(deplacement)
-            
-            current_move,val = minmax(board, depth-1)
-
-            #undo the move
-            board.pop()
-            if(val < value):
-                value = val
-                bestMove = move
-                bestMoves.append(bestMove)
-
-    return bestMoves, value
-
-def findBestMoves(board, depth):
-    bestMoves, _ = minmax(board, depth)
+def makeAMove(board):
+    bestMove = tools.getIAMove(board)
+    bestMoves = [bestMove, "a1a2"]
     print(bestMoves)
     return bestMoves
 
@@ -87,8 +44,6 @@ def main():
             board.push(chess.Move.from_uci(move))
 
         elif command.startswith('go'):
-            #  default options
-            depth = 3
 
             params = command.split(' ')[1:]
             for param, val in zip(params[::2], params[1::2]):
@@ -104,7 +59,7 @@ def main():
             start = time.time()
             ponder = None
 
-            moves = findBestMoves(board, depth)
+            moves = makeAMove(board)
 
             board.push(moves[0])
 
