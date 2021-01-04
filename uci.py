@@ -33,6 +33,11 @@ def minmax(board, depth):
 
     return bestMoves, value
 
+def findBestMoves(board, depth):
+    bestMoves, _ = minmax(board, depth)
+    print(bestMoves)
+    return bestMoves
+
 def main():
     board = chess.Board()
     show_thinking = True
@@ -81,9 +86,8 @@ def main():
             start = time.time()
             ponder = None
 
-            moves, value = minmax(board,depth)
+            moves = findBestMoves(board, depth)
 
-            print(moves)
             board.push(moves[0])
 
             if len(moves) > 1:
