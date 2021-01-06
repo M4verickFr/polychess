@@ -19,8 +19,8 @@ def choosePlayerType():
     playersType = [0,1]
     print("------------------------------")
     print("Select game type :")
-    print("0- Played versus Human")
-    print("1- Played versus Polyglot")
+    print("0- Play against Human")
+    print("1- Play against Polyglot")
     playerType = int(input("Enter selected mode : "))
 
     if(not playerType in playersType):
@@ -51,7 +51,7 @@ def getPlayerMove(board):
     moves = board.legal_moves
 
     print("----------------------------------------")
-    deplacement = input("De quelle case voulez vous partir et quelle tache voulez vous aller ?\n")
+    deplacement = input("Entrez votre mouvement : \n")
 
     for move in list(moves):
         if(deplacement == chess.Move.uci(move)):
