@@ -1,6 +1,7 @@
 import chess
 import chess.polyglot
 import random
+import math
 
 import polyglot as pg
 import evaluation
@@ -80,8 +81,8 @@ def getIAMove(board):
         #Déplacement de l'IA avec l'algorithme de minmax
         
         #val, deplacement = minmax(board,3)
-        val, deplacement = minmaxAlphaBeta(board,3,-1e-8,1e-8)
-        
+        val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
+        print(val)
 
     return deplacement
 
@@ -103,8 +104,8 @@ def minmax(board, depth):
     if depth == 0 or len(moves) == 0:
         return evaluation.getValueBoard(board),bestMove
 
-    if(board.turn):
-        value = -1e-8
+    if(not board.turn):
+        value = -1e8
         for move in moves:
             deplacement = chess.Move.from_uci(str(move))
             #do the move
@@ -115,12 +116,12 @@ def minmax(board, depth):
             #undo the move
             board.pop()
             
-            if(val > value):
+            if(val > value or not bestMove):
                 value = val
                 bestMove = move
 
     else:
-        value = 1e-8
+        value = 1e8
         for move in moves:
 
             #do the move
@@ -132,12 +133,13 @@ def minmax(board, depth):
 
             #undo the move
             board.pop()
-            if(val < value):
+            if(val < value or not bestMove):
                 value = val
                 bestMove = move
-
+    print(bestMove)
     return value, bestMove
 
+"""
 def minmaxAlphaBeta(board, depth, alpha, beta):
     moves = list(board.legal_moves)
 
@@ -147,7 +149,7 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
         return evaluation.getValueBoard(board),bestMove
 
     if(board.turn):
-        value = -1e-8
+        value = -1e8
         for move in moves:
             deplacement = chess.Move.from_uci(str(move))
             #do the move
@@ -162,14 +164,13 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
                 value = val
                 bestMove = move
 
-            alpha = max(alpha, val)
+            alpha = max(alpha, value)
 
             if(beta < alpha and bestMove):
-                print(bestMove)
                 return value, bestMove
 
     else:
-        value = 1e-8
+        value = 1e8
         for move in moves:
 
             #do the move
@@ -185,12 +186,74 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
                 value = val
                 bestMove = move
 
-            beta = min(beta, val)
+            beta = min(beta, value)
             if(beta < alpha and bestMove):
-                print(bestMove)
                 return value, bestMove
 
     return value, bestMove
+"""
+
+def minmaxAlphaBeta(board, depth, alpha, beta):
+    moves = list(board.legal_moves)
+
+    bestMove = None
+
+    if depth == 0 or len(moves) == 0:
+        return evaluation.getValueBoard(board),bestMove
+
+    if(not board.turn):
+        value = 0
+        for move in moves:
+            deplacement = chess.Move.from_uci(str(move))
+            #do the move
+            board.push(deplacement)
+            print("11a " + str(alpha),"b " + str(beta))
+            
+            val, current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
+            print("v" + str(val))
+            print("21a " + str(alpha),"b " + str(beta))
+            #undo the move
+            board.pop()
+
+            if(val < value or not bestMove):
+                value = val
+                bestMove = move
+
+            if(value >= beta):
+                return beta, bestMove
+
+            if(value > alpha):
+                alpha = value
+
+        return alpha, bestMove
+        
+    else:
+        value = 0
+        for move in moves:
+
+            #do the move
+            deplacement = chess.Move.from_uci(str(move))
+            #do the move
+            board.push(deplacement)
+            print("12a " + str(alpha),"b " + str(beta))
+
+            val,current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
+            print("v" + str(val))
+            print("22a " + str(alpha),"b " + str(beta))
+            #undo the move
+            board.pop()
+
+            if(val < value or not bestMove):
+                value = val
+                bestMove = move
+
+            if(value <= alpha):
+                return alpha, bestMove
+
+            if(value < beta):
+                beta = value
+            
+        return beta, bestMove
 
 def renderSVG(board):
     svg=open("chessrender.svg", "w") 
