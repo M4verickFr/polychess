@@ -80,8 +80,8 @@ def getIAMove(board):
 
         #Déplacement de l'IA avec l'algorithme de minmax
         
-        #val, deplacement = minmax(board,3)
-        val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
+        val, deplacement = minmax(board,3)
+        #val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
         print(val)
 
     return deplacement
