@@ -35,7 +35,7 @@ def getMove(board, playerType):
     move = None
     playerTypeMovesFunction = [
         getPlayerMove,
-        getIAMove
+        getBestMove
     ]
 
     movesFunction = playerTypeMovesFunction[playerType]
@@ -64,11 +64,10 @@ def getPlayerMove(board):
         print("Typing error : no possible movement corresponds to your entry")      
         return getPlayerMove(board)
     
-
     return deplacement
 
 
-def getIAMove(board):
+def getBestMove(board):
     #Get AI Movement
     maxWeight = 0
     deplacement = None

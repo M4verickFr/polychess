@@ -11,7 +11,7 @@ import chess.pgn
 
 
 def makeAMove(board):
-    bestMove = tools.getIAMove(board)
+    bestMove = tools.getBestMove(board)
     bestMoves = [bestMove, "a1a2"]
     print(bestMoves)
     return bestMoves
@@ -31,6 +31,7 @@ def main():
 
         elif command == 'debug':
             print(board)
+            print('debug')
 
         elif command == 'uci':
             print('id name PolyChess')
@@ -42,12 +43,36 @@ def main():
 
         elif command == 'ucinewgame':
             board.reset()
+            game = chess.pgn.Game()
+
+        elif command == 'renderSVG':
+            tools.renderSVG(board)
+
+        elif command == 'exportPGN':
+            print(game, file=open("game.pgn", "w"), end="\n\n")
+
+        elif command == 'readPGN':
+            game = chess.pgn.read_game(open("game.pgn"))
+            board = game.board() 
+            for move in game.mainline_moves():
+                board.push(move)
+
+        elif command == 'findBestMove':
+            bestMove = tools.getBestMove(board)
+            print('bestmove ' + str(bestMove))
+
+        elif command.startswith('fen'):
+            fen = command[3:]
+            board.set_fen(fen)
+            return fen
 
         elif command.startswith('position'):
             params = command.split(' ')
             move = params.pop()
             board.push(chess.Move.from_uci(move))
             node = game.add_variation(chess.Move.from_uci(move))
+            
+
 
         elif command.startswith('go'):
 
@@ -79,15 +104,6 @@ def main():
 
         elif command.startswith('otim'):
             opp_time = int(command.split()[1])
-
-        elif command.startswith('exportPGN'):
-            print(game, file=open("game.pgn", "w"), end="\n\n")
-
-        elif command.startswith('readPGN'):
-            game = chess.pgn.read_game(open("game.pgn"))
-            board = game.board() 
-            for move in game.mainline_moves():
-                board.push(move)
             
         else:
             pass
