@@ -9,7 +9,7 @@ import tools
 def main():
     """Main function for playing chess game with the console
     """
-    playerType = tools.choosePlayerType()
+    playerType = tools.menu()
 
     board = tools.initBoard()
     tools.displayBoard(board)

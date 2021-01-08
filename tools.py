@@ -15,18 +15,18 @@ def initBoard():
 def displayBoard(board):
     print(board)
 
-def choosePlayerType():
+def menu():
     playersType = [0,1]
     print("------------------------------")
     print("Select game type :")
     print("0- Play against Human")
-    print("1- Play against Polyglot")
+    print("1- Play against Program")
     playerType = int(input("Enter selected mode : "))
 
     if(not playerType in playersType):
         print("------------------------------")
-        print("Erreur de saisie")
-        choosePlayerType()
+        print("Typing error")
+        menu()
 
     return playerType
 
@@ -51,14 +51,17 @@ def getPlayerMove(board):
     moves = board.legal_moves
 
     print("----------------------------------------")
-    deplacement = input("Entrez votre mouvement : \n")
+    if(board.turn):
+    	deplacement = input("Player 1 - Enter your mouvement : \n")
+    else:
+    	deplacement = input("Player 2 - Enter your mouvement : \n")
 
     for move in list(moves):
         if(deplacement == chess.Move.uci(move)):
             validDeplacement = True
     
     if(not validDeplacement):
-        print("Erreur de saisie : aucun mouvement possible ne correspond a votre saisie")      
+        print("Typing error : no possible movement corresponds to your entry")      
         return getPlayerMove(board)
     
     return deplacement
@@ -69,6 +72,10 @@ def getBestMove(board):
     maxWeight = 0
     deplacement = None
 
+    #HUD
+    print("----------------------------------------")
+    print("IA - Movement :")
+    
     #Get movement in the polyglot
     deplacement = pg.bestMove(board)
 
@@ -81,8 +88,10 @@ def getBestMove(board):
         
         val, deplacement = minmax(board,3)
         #val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
-        print(val)
-
+    
+    #HUD    
+    print(str(deplacement))
+    
     return deplacement
 
 def makeMove(board, playerType):
@@ -135,7 +144,7 @@ def minmax(board, depth):
             if(val < value or not bestMove):
                 value = val
                 bestMove = move
-    print(bestMove)
+
     return value, bestMove
 
 """
