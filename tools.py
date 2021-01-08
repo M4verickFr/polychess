@@ -10,12 +10,22 @@ import chess.svg
 
 
 def initBoard():
+    """board initialisation
+
+    Returns:
+        board: default chess board
+    """
     return chess.Board()
 
 def displayBoard(board):
     print(board)
 
 def menu():
+    """select game type 
+
+    Returns:
+        string: gametype
+    """
     playersType = [0,1]
     print("------------------------------")
     print("Select game type :")
@@ -31,6 +41,15 @@ def menu():
     return playerType
 
 def getMove(board, playerType):
+    """Get the move related with playerType
+
+    Args:
+        board (board): board object from chess
+        playerType (string): selected player type
+
+    Returns:
+        string: piece movement on the board, i.e. "g2g4"
+    """
     #Get the move related with the playerType
     move = None
     playerTypeMovesFunction = [
@@ -46,28 +65,41 @@ def getMove(board, playerType):
 #get all the legal moves for the current position
 
 def getPlayerMove(board):
+    """Select player move
+
+    Args:
+        board (board): board object from chess
+
+    Returns:
+        string: selected player move
+    """
     #Display player movement selection
-    validDeplacement = False
     moves = board.legal_moves
 
     print("----------------------------------------")
     if(board.turn):
-    	deplacement = input("Player 1 - Enter your mouvement : \n")
+    	inputMove = input("Player 1 - Enter your mouvement : \n")
     else:
-    	deplacement = input("Player 2 - Enter your mouvement : \n")
+    	inputMove = input("Player 2 - Enter your mouvement : \n")
 
     for move in list(moves):
-        if(deplacement == chess.Move.uci(move)):
-            validDeplacement = True
+        if(inputMove == chess.Move.uci(move)):
+            return inputMove
     
-    if(not validDeplacement):
-        print("Typing error : no possible movement corresponds to your entry")      
-        return getPlayerMove(board)
+    print("Typing error : no possible movement corresponds to your entry")      
+    return getPlayerMove(board)
     
-    return deplacement
 
 
 def getBestMove(board):
+    """find the best move
+
+    Args:
+        board (board): board object from chess
+
+    Returns:
+        UCI.move: piece movement on the board, i.e. "g2g4"
+    """
     #Get AI Movement
     maxWeight = 0
     deplacement = None
@@ -95,6 +127,15 @@ def getBestMove(board):
     return deplacement
 
 def makeMove(board, playerType):
+    """make move and display board
+
+    Args:
+        board (board): board object from chess
+        playerType (string): selected player type
+
+    Returns:
+        board: updated board
+    """
     move = getMove(board, playerType)
 
     deplacement = chess.Move.from_uci(str(move))
@@ -106,6 +147,16 @@ def makeMove(board, playerType):
 
 
 def minmax(board, depth):
+    """get the best move and it weight
+
+    Args:
+        board (board): board object from chess
+        depth (int): depth of the search
+
+    Returns:
+        int: move weight
+        UCI.move: piece movement on the board, i.e. "g2g4"
+    """
     moves = list(board.legal_moves)
     bestMove = None
 
@@ -147,61 +198,73 @@ def minmax(board, depth):
 
     return value, bestMove
 
-"""
+
+# def minmaxAlphaBeta(board, depth, alpha, beta):
+#     moves = list(board.legal_moves)
+
+#     bestMove = None
+
+#     if depth == 0 or len(moves) == 0:
+#         return evaluation.getValueBoard(board),bestMove
+
+#     if(board.turn):
+#         value = -1e8
+#         for move in moves:
+#             deplacement = chess.Move.from_uci(str(move))
+#             #do the move
+#             board.push(deplacement)
+            
+#             val, current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
+
+#             #undo the move
+#             board.pop()
+            
+#             if(val > value or not bestMove):
+#                 value = val
+#                 bestMove = move
+
+#             alpha = max(alpha, value)
+
+#             if(beta < alpha and bestMove):
+#                 return value, bestMove
+
+#     else:
+#         value = 1e8
+#         for move in moves:
+
+#             #do the move
+#             deplacement = chess.Move.from_uci(str(move))
+#             #do the move
+#             board.push(deplacement)
+            
+#             val,current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
+
+#             #undo the move
+#             board.pop()
+#             if(val < value or not bestMove):
+#                 value = val
+#                 bestMove = move
+
+#             beta = min(beta, value)
+#             if(beta < alpha and bestMove):
+#                 return value, bestMove
+
+#     return value, bestMove
+
+
 def minmaxAlphaBeta(board, depth, alpha, beta):
-    moves = list(board.legal_moves)
+    """minmax upgrade: it doesn't run through all the branches
 
-    bestMove = None
+    Args:
+        board (board): board object from ches
+        depth (int): depth of the search
+        alpha (int): lightest movement
+        beta (int): weightest movement
 
-    if depth == 0 or len(moves) == 0:
-        return evaluation.getValueBoard(board),bestMove
-
-    if(board.turn):
-        value = -1e8
-        for move in moves:
-            deplacement = chess.Move.from_uci(str(move))
-            #do the move
-            board.push(deplacement)
-            
-            val, current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
-
-            #undo the move
-            board.pop()
-            
-            if(val > value or not bestMove):
-                value = val
-                bestMove = move
-
-            alpha = max(alpha, value)
-
-            if(beta < alpha and bestMove):
-                return value, bestMove
-
-    else:
-        value = 1e8
-        for move in moves:
-
-            #do the move
-            deplacement = chess.Move.from_uci(str(move))
-            #do the move
-            board.push(deplacement)
-            
-            val,current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
-
-            #undo the move
-            board.pop()
-            if(val < value or not bestMove):
-                value = val
-                bestMove = move
-
-            beta = min(beta, value)
-            if(beta < alpha and bestMove):
-                return value, bestMove
-
-    return value, bestMove
-"""
-
-def minmaxAlphaBeta(board, depth, alpha, beta):
+    Returns:
+        int: move weight
+        UCI.move: piece movement on the board, i.e. "g2g4"
+    """
     moves = list(board.legal_moves)
 
     bestMove = None
@@ -264,5 +327,10 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
         return beta, bestMove
 
 def renderSVG(board):
+    """render board in a SVG file
+
+    Args:
+        board (board): board object from chess
+    """
     svg=open("chessrender.svg", "w") 
     svg.write(chess.svg.board(board))
