@@ -9,14 +9,29 @@ import tools
 
 import chess.pgn 
 
-
 def makeAMove(board):
+    """get the IA move
+
+    Args:
+        board (board): board object from chess
+
+    Returns:
+        Array: list containts current bestMove and predicted next move
+    """
     bestMove = tools.getBestMove(board)
     bestMoves = [bestMove, "a1a2"]
     print(bestMoves)
     return bestMoves
 
 def main():
+    """main function to play with the UCI protocol
+
+    Infinite loop:
+        - wait input from GUI
+        - make action related to the input
+        
+    Find the UCI protocol documentation on GOOGLE, because GOOGLE IS YOUR BEST FRIEND
+    """
     board = chess.Board()
     game = chess.pgn.Game()
 
@@ -72,8 +87,6 @@ def main():
             board.push(chess.Move.from_uci(move))
             node = game.add_variation(chess.Move.from_uci(move))
             
-
-
         elif command.startswith('go'):
 
             params = command.split(' ')[1:]

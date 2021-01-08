@@ -4,6 +4,8 @@ import requests, json
 class Lichess:
     
     def __init__(self):
+        """Set initial variables
+        """
         self.token = "iSyU2c6HksQFeor4"
         self.header = {
             "Authorization": "Bearer {}".format(self.token)
@@ -14,6 +16,11 @@ class Lichess:
         self.gameId = input('GameId : ')
 
     def makeMove(self, moveUCI):
+        """send request to make move on lichess
+
+        Args:
+            moveUCI (string): player movement
+        """
         request = requests.post("https://lichess.org/api/bot/game/" + self.gameId + "/move/" + moveUCI, headers=self.header)
         res = json.loads(str(request.text))
         if 'error' in res:
@@ -21,6 +28,11 @@ class Lichess:
             self.makeMove(input('A toi de jouer : '))
         
     def loadGame(self, res):
+        """Inititalisation of the game when we connect to the game
+
+        Args:
+            res (dict): data about the game
+        """
         if 'id' in res['white']:
             self.firstPlayer = 1
             if len(res['state']['moves']) == 0:
@@ -40,6 +52,8 @@ class Lichess:
             self.makeMove(input('A toi de jouer : '))
 
     def getStatusGame(self):
+        """Get stream of the game, and make action when data is received
+        """
         url = f"https://lichess.org/api/bot/game/stream/{self.gameId}"
         s = requests.Session()
 
@@ -51,7 +65,6 @@ class Lichess:
                     self.loadGame(res)
 
                 elif 'gameState' in line:
-                    print(line)
                     res = json.loads(line)
                     moves = res['moves'].split(' ')
                     if (len(moves) + self.firstPlayer) % 2 == 1:

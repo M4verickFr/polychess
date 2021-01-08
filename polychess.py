@@ -7,10 +7,7 @@ import tools
 #board
 
 def main():
-    """
-        -gameType(int): the type of the current player
-        -0:Played by the console
-        -1:Played with protocol UCI
+    """Main function for playing chess game with the console
     """
     playerType = tools.choosePlayerType()
 
@@ -29,11 +26,6 @@ def main():
     print("The game is over")
     print(board.result())
     tools.renderSVG(board)
-    
-
-
-    
-
 
 # Calls the main function
 

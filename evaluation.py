@@ -66,8 +66,16 @@ king = [
     [20, 30, 10,  0,  0, 10, 30, 20]
 ]
 
-
 def convert_square(square,is_white):
+    """Convert int to find row and colomn
+
+    Args:
+        square (int): case number of the piece on the board
+        is_white (bool): if the piece is white
+
+    Returns:
+        Array: array composed with the row and the colomn of the piece
+    """
     if(is_white):
         row = 7 - (square // 8)
     else:
@@ -77,6 +85,15 @@ def convert_square(square,is_white):
     return [row, column]
 
 def piece_value(piece, square):
+    """return weight of the piece based on the type of the piece and their on the board 
+
+    Args:
+        piece (string): type of the piece
+        square (int): case number of the piece on the board
+
+    Returns:
+        int: weight of the piece
+    """
     symbol = piece.symbol()
     is_white = not symbol.islower()
     symbol = symbol.islower()
@@ -99,9 +116,15 @@ def piece_value(piece, square):
         
     return score
 
-
-
 def getValueBoard(board):
+    """return weight of the board
+
+    Args:
+        board (board): board object from chess
+
+    Returns:
+        int: weight of the board
+    """
     materialWt = 0
 
     for i in range(1,6):
