@@ -60,6 +60,10 @@ def getMove(board, playerType):
     movesFunction = playerTypeMovesFunction[playerType]
     move = str(movesFunction(board))
 
+    if playerType == 1:
+        print("----------------------------------------")
+        print("IA - Movement :" + move)
+
     return move
 
 #get all the legal moves for the current position
@@ -88,8 +92,6 @@ def getPlayerMove(board):
     
     print("Typing error : no possible movement corresponds to your entry")      
     return getPlayerMove(board)
-    
-
 
 def getBestMove(board):
     """find the best move
@@ -103,10 +105,6 @@ def getBestMove(board):
     #Get AI Movement
     maxWeight = 0
     deplacement = None
-
-    #HUD
-    print("----------------------------------------")
-    print("IA - Movement :")
     
     #Get movement in the polyglot
     deplacement = pg.bestMove(board)
@@ -120,9 +118,6 @@ def getBestMove(board):
         
         val, deplacement = minmax(board,3)
         #val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
-    
-    #HUD    
-    print(str(deplacement))
     
     return deplacement
 

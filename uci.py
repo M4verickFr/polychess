@@ -46,7 +46,6 @@ def main():
 
         elif command == 'debug':
             print(board)
-            print('debug')
 
         elif command == 'uci':
             print('id name PolyChess')
@@ -74,7 +73,7 @@ def main():
 
         elif command == 'findBestMove':
             bestMove = tools.getBestMove(board)
-            print('bestmove ' + str(bestMove))
+            print('the bestmove is ' + str(bestMove))
 
         elif command.startswith('fen'):
             fen = command[3:]
