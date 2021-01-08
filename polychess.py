@@ -12,7 +12,7 @@ def main():
         -0:Played by the console
         -1:Played with protocol UCI
     """
-    playerType = tools.choosePlayerType()
+    playerType = tools.menu()
 
     board = tools.initBoard()
     tools.displayBoard(board)
