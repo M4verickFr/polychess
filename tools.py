@@ -116,8 +116,8 @@ def getBestMove(board):
 
         #Déplacement de l'IA avec l'algorithme de minmax
         
-        #val, deplacement = minmax(board,3)
-        val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
+        val, deplacement = minmax(board,3)
+        #val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
     
     return deplacement
 
@@ -192,59 +192,6 @@ def minmax(board, depth):
                 bestMove = move
 
     return value, bestMove
-
-
-# def minmaxAlphaBeta(board, depth, alpha, beta):
-#     moves = list(board.legal_moves)
-
-#     bestMove = None
-
-#     if depth == 0 or len(moves) == 0:
-#         return evaluation.getValueBoard(board),bestMove
-
-#     if(board.turn):
-#         value = -1e8
-#         for move in moves:
-#             deplacement = chess.Move.from_uci(str(move))
-#             #do the move
-#             board.push(deplacement)
-            
-#             val, current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
-
-#             #undo the move
-#             board.pop()
-            
-#             if(val > value or not bestMove):
-#                 value = val
-#                 bestMove = move
-
-#             alpha = max(alpha, value)
-
-#             if(beta < alpha and bestMove):
-#                 return value, bestMove
-
-#     else:
-#         value = 1e8
-#         for move in moves:
-
-#             #do the move
-#             deplacement = chess.Move.from_uci(str(move))
-#             #do the move
-#             board.push(deplacement)
-            
-#             val,current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
-
-#             #undo the move
-#             board.pop()
-#             if(val < value or not bestMove):
-#                 value = val
-#                 bestMove = move
-
-#             beta = min(beta, value)
-#             if(beta < alpha and bestMove):
-#                 return value, bestMove
-
-#     return value, bestMove
 
 
 def minmaxAlphaBeta(board, depth, alpha, beta):
