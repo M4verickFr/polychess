@@ -15,6 +15,19 @@ The required features for PolyChess are:
 * PolyChess has an AI (easy to modify) that could play for the engine
 * It is possible to enter a FEN position and obtain an evaluation from PolyChess
 
+## Trello
+
+URL : https://trello.com/b/1zI4pC3X/gestion-des-t%C3%A2ches-moteur-echec
+
+## Our Team
+
+Team leader : CAULLIREAU Dorian
+Team Members :PERROLLAZ Maverick GOBJI Zied KOEBERLE Célien TORREGROSSA Alexandre
+
+## Run it!
+
+Download the programm, and open polychess.py with a python compiler. python Then compile and execut polychess.py.
+
 ## Milestones for the project
 
 Milestone 1:
