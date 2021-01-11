@@ -9,7 +9,7 @@ import tools
 def main():
     """Main function for playing chess game with the console
     """
-    playerType = tools.menu()
+    playerType,selectedFunction = tools.menu()
 
     board = tools.initBoard()
     tools.displayBoard(board)
@@ -19,9 +19,10 @@ def main():
     
     #If the game is not over
     while not board.is_game_over():
-        board = tools.makeMove(board, players[0])
+        board = tools.makeMove(board, players[0],selectedFunction)
         if not board.is_game_over():
-            board = tools.makeMove(board, players[1])
+            board = tools.makeMove(board, players[1],selectedFunction)
+            
     
     print("The game is over")
     print(board.result())

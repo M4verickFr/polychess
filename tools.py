@@ -24,9 +24,12 @@ def menu():
     """select game type 
 
     Returns:
-        string: gametype
+        int: gametype
     """
     playersType = [0,1]
+    functionsType = [0,1]
+    functionsName = ["minmax","minmaxAlphaBeta"]
+
     print("------------------------------")
     print("Select game type :")
     print("0- Play against Human")
@@ -38,27 +41,37 @@ def menu():
         print("Typing error")
         menu()
 
-    return playerType
+    if(playerType == 1):
+        print("------------------------------")
+        print("Select game type :")
+        print("0- Use minmax function")
+        print("1- Use minmaxAlphaBeta function")
+        selectedFunction = int(input("Enter selected function : "))
+        if(not selectedFunction in functionsType):
+            print("------------------------------")
+            print("Typing error")
+            menu()
+        
+        
+    return playerType,functionsName[selectedFunction]
 
-def getMove(board, playerType):
+def getMove(board, playerType,selectedFunction):
     """Get the move related with playerType
 
     Args:
         board (board): board object from chess
-        playerType (string): selected player type
+        playerType (int): selected player type
 
     Returns:
         string: piece movement on the board, i.e. "g2g4"
     """
     #Get the move related with the playerType
     move = None
-    playerTypeMovesFunction = [
-        getPlayerMove,
-        getBestMove
-    ]
 
-    movesFunction = playerTypeMovesFunction[playerType]
-    move = str(movesFunction(board))
+    if(playerType == 0):
+        move = str(getPlayerMove(board))
+    elif(playerType == 1):
+        move = str(getBestMove(board,selectedFunction))
 
     if playerType == 1:
         print("----------------------------------------")
@@ -93,7 +106,7 @@ def getPlayerMove(board):
     print("Typing error : no possible movement corresponds to your entry")      
     return getPlayerMove(board)
 
-def getBestMove(board):
+def getBestMove(board,selectedFunction = "minmax"):
     """find the best move
 
     Args:
@@ -115,23 +128,24 @@ def getBestMove(board):
         deplacement = random.choice(list(board.legal_moves))
 
         #Déplacement de l'IA avec l'algorithme de minmax
-        
-        val, deplacement = minmax(board,3)
-        #val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
+        if(selectedFunction == "minmax"):
+            val, deplacement = minmax(board,3)
+        elif(selectedFunction == "minmaxAlphaBeta"):
+            val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
     
     return deplacement
 
-def makeMove(board, playerType):
+def makeMove(board, playerType,selectedFunction):
     """make move and display board
 
     Args:
         board (board): board object from chess
-        playerType (string): selected player type
+        playerType (int): selected player type
 
     Returns:
         board: updated board
     """
-    move = getMove(board, playerType)
+    move = getMove(board, playerType,selectedFunction)
 
     deplacement = chess.Move.from_uci(str(move))
     board.push(deplacement)
