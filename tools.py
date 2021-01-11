@@ -26,6 +26,7 @@ def menu():
     Returns:
         int: gametype
     """
+    selectedFunction = 0
     playersType = [0,1]
     functionsType = [0,1]
     functionsName = ["minmax","minmaxAlphaBeta"]
