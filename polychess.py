@@ -17,16 +17,20 @@ def main():
     players = [0, playerType]
     #random.shuffle(players)
     
+    tools.renderSVG(board)
+
     #If the game is not over
     while not board.is_game_over():
         board = tools.makeMove(board, players[0],selectedFunction)
+        tools.renderSVG(board)
         if not board.is_game_over():
             board = tools.makeMove(board, players[1],selectedFunction)
+            tools.renderSVG(board)
             
     
     print("The game is over")
     print(board.result())
-    tools.renderSVG(board)
+
 
 # Calls the main function
 
