@@ -116,8 +116,8 @@ def getBestMove(board):
 
         #Déplacement de l'IA avec l'algorithme de minmax
         
-        val, deplacement = minmax(board,3)
-        #val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
+        #val, deplacement = minmax(board,3)
+        val, deplacement = minmaxAlphaBeta(board,5,-math.inf,math.inf)
     
     return deplacement
 
@@ -161,6 +161,7 @@ def minmax(board, depth):
     if(not board.turn):
         value = -1e8
         for move in moves:
+
             deplacement = chess.Move.from_uci(str(move))
             #do the move
             board.push(deplacement)
@@ -178,7 +179,6 @@ def minmax(board, depth):
         value = 1e8
         for move in moves:
 
-            #do the move
             deplacement = chess.Move.from_uci(str(move))
             #do the move
             board.push(deplacement)
@@ -273,11 +273,9 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
             deplacement = chess.Move.from_uci(str(move))
             #do the move
             board.push(deplacement)
-            print("11a " + str(alpha),"b " + str(beta))
             
             val, current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
-            print("v" + str(val))
-            print("21a " + str(alpha),"b " + str(beta))
+
             #undo the move
             board.pop()
 
@@ -285,10 +283,10 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
                 value = val
                 bestMove = move
 
-            if(value >= beta):
+            if(value <= beta):
                 return beta, bestMove
 
-            if(value > alpha):
+            if(value < alpha):
                 alpha = value
 
         return alpha, bestMove
@@ -301,11 +299,9 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
             deplacement = chess.Move.from_uci(str(move))
             #do the move
             board.push(deplacement)
-            print("12a " + str(alpha),"b " + str(beta))
 
             val,current_move = minmaxAlphaBeta(board, depth-1, alpha, beta)
-            print("v" + str(val))
-            print("22a " + str(alpha),"b " + str(beta))
+
             #undo the move
             board.pop()
 
@@ -313,10 +309,10 @@ def minmaxAlphaBeta(board, depth, alpha, beta):
                 value = val
                 bestMove = move
 
-            if(value <= alpha):
+            if(value >= alpha):
                 return alpha, bestMove
 
-            if(value < beta):
+            if(value > beta):
                 beta = value
             
         return beta, bestMove
